@@ -14,6 +14,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name="BookReservationServlet", urlPatterns = "/bookReservation")
 @Component
@@ -26,6 +27,19 @@ public class BookReservationServlet extends HttpServlet {
         this.bookReservationService = bookReservationService;
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        IWebExchange webExchange = JakartaServletWebApplication
+                .buildApplication(getServletContext())
+                .buildExchange(req,resp);
+        WebContext context = new WebContext(webExchange);
+
+        List<BookReservation> reservations = bookReservationService.findAll();
+
+        context.setVariable("reservations",reservations);
+
+        springTemplateEngine.process("reservations.html",context,resp.getWriter());
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

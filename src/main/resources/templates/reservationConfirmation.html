@@ -8,28 +8,67 @@
             width: 800px;
             margin: auto;
             font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         h1 {
             color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4CAF50;
         }
         table {
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         table, td, th {
-            border: 1px solid #333;
+            border: 1px solid #ddd;
         }
         th {
             background-color: #4CAF50;
             color: white;
-            padding: 12px;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
         }
         td {
-            padding: 10px;
+            padding: 12px;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        td:first-child {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            width: 40%;
+        }
+        tr:hover td {
+            background-color: #f5f5f5;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-link:hover {
+            background-color: #45a049;
+        }
+        .success-icon {
+            color: #4CAF50;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -52,13 +91,17 @@
         </tr>
         <tr>
             <td><b>Reservation for Book</b></td>
-            <td th:text="${reservation.bookTitle}">Book Title Here</td>
+            <td th:text="${reservation.book.title}">Book Title Here</td>
         </tr>
         <tr>
             <td><b>Number of copies</b></td>
             <td th:text="${reservation.numberOfCopies}">1</td>
         </tr>
     </table>
+    <div style="text-align: center;">
+        <a href="/books" class="back-link">Back to Book List</a>
+        <a href="/bookReservation" class="back-link" style="background-color: #2196F3;">View All Reservations</a>
+    </div>
 </section>
 </body>
 </html>

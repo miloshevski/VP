@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Book Reservations</title>
+    <style type="text/css">
+        body {
+            width: 900px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4CAF50;
+        }
+        .reservations-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .reservation-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .reservation-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+        .reservation-item:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+        .reservation-details {
+            color: #555;
+            line-height: 1.6;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+        .no-reservations {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Book Reservations</h1>
+    <div class="reservations-container">
+        <ul class="reservation-list" th:if="${reservations != null and !reservations.isEmpty()}">
+            <li class="reservation-item" th:each="reservation : ${reservations}">
+                <div class="book-title" th:text="${reservation.book.title}">Book Title</div>
+                <div class="reservation-details">
+                    <span class="detail-label">Reader:</span> <span th:text="${reservation.readerName}">Name</span><br/>
+                    <span class="detail-label">Address:</span> <span th:text="${reservation.readerAddress}">Address</span><br/>
+                    <span class="detail-label">Number of Copies:</span> <span th:text="${reservation.numberOfCopies}">0</span>
+                </div>
+            </li>
+        </ul>
+        <div class="no-reservations" th:if="${reservations == null or reservations.isEmpty()}">
+            <p>No reservations found.</p>
+        </div>
+        <div style="text-align: center;">
+            <a href="/books" class="back-link">Back to Book List</a>
+        </div>
+    </div>
+</body>
+</html>
