@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Authors</title>
+</head>
+<body>
+<h2>List of Authors</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Country</th>
+        <th>Biography</th>
+        <th>Likes</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="author : ${authors}">
+        <td th:text="${author.name + ' ' + author.surname}"></td>
+        <td th:text="${author.country}"></td>
+        <td th:text="${author.biography}"></td>
+        <td th:text="${author.likes}"></td>
+        <td>
+            <form th:action="@{'/authors/like/' + ${author.id}}" method="post">
+                <button type="submit">Like</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -5,5 +5,6 @@ import mk.finki.ukim.wp.lab.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    public List<Author> findAll();
+    List<Author> findAll();
+    void likeAuthor(Long id); // нов метод
 }

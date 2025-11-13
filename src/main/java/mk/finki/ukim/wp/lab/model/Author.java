@@ -11,4 +11,9 @@ public class Author {
     private String surname;
     private String country;
     private String biography;
+    private int likes;
+
+    public void addLike() {
+        this.likes++;
+    }
 }

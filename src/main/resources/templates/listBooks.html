@@ -43,6 +43,7 @@
             text-decoration: none;
             border-radius: 3px;
             font-size: 0.9rem;
+            margin: 10px;
         }
         .btn-add {
             background-color: #4CAF50;
@@ -65,7 +66,6 @@
 </header>
 <main>
 
-    <!-- Search form (од Лаб 1) -->
     <div class="search-box">
         <form th:action="@{/books}" method="get">
             <div class="search-row">
@@ -98,6 +98,10 @@
            class="btn btn-add">
             Add Book
         </a>
+        <a th:href="@{/authors}"
+           class="btn btn-add">
+            View all authors
+        </a>
     </div>
 
     <!-- Табела со сите книги (Лаб 2) -->
@@ -126,7 +130,6 @@
                     Edit
                 </a>
 
-                &nbsp;|&nbsp;
 
                 <!-- Delete (POST, како што бара задачата) -->
                 <form th:action="@{'/books/delete/' + ${book.id}}"

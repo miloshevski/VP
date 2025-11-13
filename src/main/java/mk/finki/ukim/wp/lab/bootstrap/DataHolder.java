@@ -19,12 +19,10 @@ public class DataHolder {
     @PostConstruct
     public void init() {
 
-        Author a1 = new Author(1L, "George", "Orwell", "UK",
-                "Author of 1984 and Animal Farm.");
-        Author a2 = new Author(2L, "J.R.R.", "Tolkien", "UK",
-                "Author of The Hobbit and LOTR.");
-        Author a3 = new Author(3L, "Fyodor", "Dostoevsky", "Russia",
-                "Author of Crime and Punishment.");
+        Author a1 = new Author(1L, "George", "Orwell", "UK", "Author of 1984 and Animal Farm.", 0);
+        Author a2 = new Author(2L, "J.R.R.", "Tolkien", "UK", "Author of The Hobbit and LOTR.", 0);
+        Author a3 = new Author(3L, "Fyodor", "Dostoevsky", "Russia", "Author of Crime and Punishment.", 0);
+
 
         authors.add(a1);
         authors.add(a2);
