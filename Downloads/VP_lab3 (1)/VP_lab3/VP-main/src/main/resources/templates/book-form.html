@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book} != null ? 'Edit Book' : 'Add Book'">Book Form</title>
+    <style>
+        body {
+            width: 600px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button, a {
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 6px 12px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .btn-submit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-cancel {
+            text-decoration: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 th:text="${book} != null ? 'Edit Book' : 'Add New Book'">Book Form</h1>
+
+<form th:action="${book} != null ? @{/books/edit/{id}(id=${book.id})} : @{/books/add}"
+      method="post">
+
+    <!-- Optional: hidden field for id (корисно за edit, не смета за add) -->
+    <input type="hidden" name="id" th:value="${book != null} ? ${book.id} : ''"/>
+
+    <!-- Title -->
+    <label for="title">Title:</label>
+    <input type="text"
+           id="title"
+           name="title"
+           th:value="${book} != null ? ${book.title} : ''"
+           required/>
+
+    <!-- Genre -->
+    <label for="genre">Genre:</label>
+    <input type="text"
+           id="genre"
+           name="genre"
+           th:value="${book} != null ? ${book.genre} : ''"
+           required/>
+
+    <!-- Average Rating -->
+    <label for="averageRating">Average Rating:</label>
+    <input type="number"
+           id="averageRating"
+           name="averageRating"
+           step="0.1"
+           min="1" max="10"
+           th:value="${book} != null ? ${book.averageRating} : ''"
+           required/>
+
+    <!-- Author (select) -->
+    <label for="authorId">Author:</label>
+    <select id="authorId" name="authorId" required>
+        <option value="" disabled
+                th:selected="${book} == null">
+            -- Select Author --
+        </option>
+        <option th:each="author : ${authors}"
+                th:value="${author.id}"
+                th:text="${author.name + ' ' + author.surname}"
+                th:selected="${book != null} ? ${book.author != null and book.author.id == author.id} : false">
+        </option>
+    </select>
+
+    <!-- Submit & Cancel -->
+    <button type="submit" class="btn btn-submit"
+            th:text="${book} != null ? 'Update Book' : 'Create Book'">
+        Save
+    </button>
+
+    <a th:href="@{/books}" class="btn-cancel">Cancel</a>
+</form>
+
+</body>
+</html>
