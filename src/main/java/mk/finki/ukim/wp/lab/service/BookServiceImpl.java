@@ -1,15 +1,12 @@
 package mk.finki.ukim.wp.lab.service;
 
-import mk.finki.ukim.wp.lab.bootstrap.DataHolder;
 import mk.finki.ukim.wp.lab.model.Author;
 import mk.finki.ukim.wp.lab.model.Book;
 import mk.finki.ukim.wp.lab.repository.AuthorRepository;
 import mk.finki.ukim.wp.lab.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -45,47 +42,35 @@ public class BookServiceImpl implements BookService {
                         rating == null
                                 || book.getAverageRating() >= rating
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public Book save(String title, String genre, Double averageRating, Long authorId) {
 
-        // 1) најди author
-        Author author = authorRepository.findAll()
-                .stream()
-                .filter(a -> a.getId().equals(authorId))
-                .findFirst()
+        // 1) најди author од база
+        Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("AuthorNotFound"));
 
-        // 2) генерирај нов ID
-        Long newId = DataHolder.books.stream()
-                .map(Book::getId)
-                .max(Comparator.naturalOrder())
-                .orElse(0L) + 1;
+        // 2) создади книга (ID НЕ го сетираш – @GeneratedValue ќе го направи тоа)
+        Book book = new Book();
+        book.setTitle(title);
+        book.setGenre(genre);
+        book.setAverageRating(averageRating);
+        book.setAuthor(author);
 
-        // 3) создади книга
-        Book book = new Book(newId, title, genre, averageRating, author);
-
-        // 4) зачувај во DataHolder
-        DataHolder.books.add(book);
-
-        return book;
+        // 3) зачувај во база
+        return bookRepository.save(book);
     }
 
     @Override
     public Book edit(Long id, String title, String genre, Double averageRating, Long authorId) {
-        // 1) најди ја постоечката книга
-        Book book = DataHolder.books.stream()
-                .filter(b -> b.getId().equals(id))
-                .findFirst()
+        // 1) најди ја постоечката книга од база
+        Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("BookNotFound"));
 
-        // 2) најди го новиот author
-        Author author = authorRepository.findAll()
-                .stream()
-                .filter(a -> a.getId().equals(authorId))
-                .findFirst()
+        // 2) најди го новиот author од база
+        Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("AuthorNotFound"));
 
         // 3) ажурирај полиња
@@ -94,20 +79,17 @@ public class BookServiceImpl implements BookService {
         book.setAverageRating(averageRating);
         book.setAuthor(author);
 
-        return book;
+        // 4) зачувај промени
+        return bookRepository.save(book);
     }
 
     @Override
     public void deleteById(Long id) {
-        DataHolder.books.removeIf(b -> b.getId().equals(id));
+        bookRepository.deleteById(id);
     }
 
     @Override
     public Book findById(Long id) {
-        return DataHolder.books.stream()
-                .filter(b -> b.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return bookRepository.findById(id).orElse(null);
     }
-
 }
