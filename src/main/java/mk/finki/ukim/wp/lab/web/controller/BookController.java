@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class BookController {
@@ -18,7 +20,7 @@ public class BookController {
         this.bookService = bookService;
         this.authorService = authorService;
     }
-    @GetMapping("/book-form")
+    @GetMapping("book-form")
     public String getAddBookPage(Model model) {
 
         model.addAttribute("book", null); // add режим
@@ -27,7 +29,7 @@ public class BookController {
         return "book-form";
     }
 
-    @GetMapping("/book-form/{id}")
+    @GetMapping("book-form/{id}")
     public String getEditBookForm(@PathVariable Long id, Model model) {
 
         Book book = bookService.findById(id);
@@ -41,16 +43,16 @@ public class BookController {
         return "book-form"; // го рендерира book-form.html
     }
 
-    @PostMapping("/add")
+    @PostMapping("add")
     public String saveBook(@RequestParam String title,
                            @RequestParam String genre,
                            @RequestParam Double averageRating,
                            @RequestParam Long authorId) {
 
         bookService.save(title, genre, averageRating, authorId);
-        return "redirect:/books";
+        return "redirect:/";
     }
-    @PostMapping("/edit/{bookId}")
+    @PostMapping("edit/{bookId}")
     public String editBook(@PathVariable Long bookId,
                            @RequestParam String title,
                            @RequestParam String genre,
@@ -58,15 +60,17 @@ public class BookController {
                            @RequestParam Long authorId) {
 
         bookService.edit(bookId, title, genre, averageRating, authorId);
-        return "redirect:/books";
+        return "redirect:/";
     }
-    @PostMapping("/delete/{id}")
+    @PostMapping("delete/{id}")
     public String deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
-        return "redirect:/books";
+        return "redirect:/";
     }
     @GetMapping
     public String getBooksPage(@RequestParam(required = false) String error,
+                               @RequestParam(required = false) String titleSearch,
+                               @RequestParam(required = false) Double minRating,
                                Model model) {
 
         if (error != null && !error.isEmpty()) {
@@ -74,7 +78,17 @@ public class BookController {
             model.addAttribute("error", error);
         }
 
-        model.addAttribute("books", bookService.listAll()); // сите книги
-        return "listBooks"; // listBooks.html
+        List<Book> books;
+        if((titleSearch != null && !titleSearch.isEmpty()) || minRating != null){
+            books = bookService.searchBooks(titleSearch,minRating);
+        }else{
+            books = bookService.listAll();
+        }
+
+        model.addAttribute("titleSearch",titleSearch);
+        model.addAttribute("minRating",minRating);
+        model.addAttribute("books",books);
+
+        return "listBooks";
     }
 }

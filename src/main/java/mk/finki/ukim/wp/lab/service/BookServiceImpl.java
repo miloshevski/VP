@@ -5,11 +5,11 @@ import mk.finki.ukim.wp.lab.model.Author;
 import mk.finki.ukim.wp.lab.model.Book;
 import mk.finki.ukim.wp.lab.repository.AuthorRepository;
 import mk.finki.ukim.wp.lab.repository.BookRepository;
-import mk.finki.ukim.wp.lab.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -30,7 +30,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> searchBooks(String text, Double rating) {
-        return bookRepository.searchBooks(text, rating);
+        // Apply filters independently:
+        // - if text is null/empty -> ignore title filter
+        // - if rating is null -> ignore rating filter
+        return bookRepository.findAll()
+                .stream()
+                .filter(book ->
+                        text == null
+                                || text.isEmpty()
+                                || book.getTitle().toLowerCase()
+                                .contains(text.toLowerCase())
+                )
+                .filter(book ->
+                        rating == null
+                                || book.getAverageRating() >= rating
+                )
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -57,6 +72,7 @@ public class BookServiceImpl implements BookService {
 
         return book;
     }
+
     @Override
     public Book edit(Long id, String title, String genre, Double averageRating, Long authorId) {
         // 1) најди ја постоечката книга
@@ -80,10 +96,12 @@ public class BookServiceImpl implements BookService {
 
         return book;
     }
+
     @Override
     public void deleteById(Long id) {
         DataHolder.books.removeIf(b -> b.getId().equals(id));
     }
+
     @Override
     public Book findById(Long id) {
         return DataHolder.books.stream()
