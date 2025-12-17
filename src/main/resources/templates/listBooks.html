@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="utf-8">
     <title>Book Reservation - Welcome and choose a Book</title>
@@ -67,7 +70,7 @@
 
     <!-- Search form (од Лаб 1) -->
     <div class="search-box">
-        <form th:action="@{/}" method="get">
+        <form th:action="@{/books}" method="get">
             <div class="search-row">
                 <div>
                     <label>
@@ -87,14 +90,13 @@
             </div>
             <div style="margin-top:15px;">
                 <button type="submit">Search</button>
-                <a th:href="@{/}">Clear</a>
+                <a th:href="@{/books}">Clear</a>
             </div>
         </form>
     </div>
 
-    <!-- Add Book копче (Лаб 2) -->
-    <div style="margin-top: 20px; margin-bottom: 10px;">
-        <a th:href="@{/book-form}"
+    <div sec:authorize="hasRole('ADMIN')" style="margin-top: 20px; margin-bottom: 10px;">
+        <a th:href="@{/books/book-form}"
            class="btn btn-add">
             Add Book
         </a>
@@ -108,7 +110,7 @@
             <th>Genre</th>
             <th>Rating</th>
             <th>Author</th>
-            <th>Actions</th>
+            <th sec:authorize="hasRole('ADMIN')">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -119,9 +121,8 @@
             <td th:text="${book.author.name + ' ' + book.author.surname}">
                 Author Name
             </td>
-            <td>
-                <!-- Edit (GET) -->
-                <a th:href="@{'/book-form/' + ${book.id}}"
+            <td sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{'/books/book-form/' + ${book.id}}"
                    class="btn btn-edit">
                     Edit
                 </a>
@@ -129,7 +130,7 @@
                 &nbsp;|&nbsp;
 
                 <!-- Delete (POST, како што бара задачата) -->
-                <form th:action="@{'/delete/' + ${book.id}}"
+                <form th:action="@{'/books/delete/' + ${book.id}}"
                       method="post"
                       style="display:inline;">
                     <button type="submit" class="btn btn-delete">

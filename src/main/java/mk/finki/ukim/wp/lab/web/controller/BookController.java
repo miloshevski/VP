@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/books")
 public class BookController {
 
     private final BookService bookService;
@@ -50,7 +50,7 @@ public class BookController {
                            @RequestParam Long authorId) {
 
         bookService.save(title, genre, averageRating, authorId);
-        return "redirect:/";
+        return "redirect:/books";
     }
     @PostMapping("edit/{bookId}")
     public String editBook(@PathVariable Long bookId,
@@ -60,12 +60,12 @@ public class BookController {
                            @RequestParam Long authorId) {
 
         bookService.edit(bookId, title, genre, averageRating, authorId);
-        return "redirect:/";
+        return "redirect:/books";
     }
     @PostMapping("delete/{id}")
     public String deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
-        return "redirect:/";
+        return "redirect:/books";
     }
     @GetMapping
     public String getBooksPage(@RequestParam(required = false) String error,

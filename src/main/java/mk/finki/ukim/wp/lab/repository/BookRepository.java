@@ -15,4 +15,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     );
 
     List<Book> findByTitleContainingIgnoreCase(String text);
+
+    List<Book> findByAverageRatingGreaterThanEqual(Double rating);
+    List<Book> findByAverageRatingGreaterThanEqualOrderByAverageRatingDesc(Double rating);
 }
