@@ -49,7 +49,7 @@
 
 <h1 th:text="${book} != null ? 'Edit Book' : 'Add New Book'">Book Form</h1>
 
-<form th:action="${book} != null ? @{/edit/{id}(id=${book.id})} : @{/add}"
+<form th:action="${book} != null ? @{/books/edit/{id}(id=${book.id})} : @{/books/add}"
       method="post">
 
     <!-- Optional: hidden field for id (корисно за edit, не смета за add) -->

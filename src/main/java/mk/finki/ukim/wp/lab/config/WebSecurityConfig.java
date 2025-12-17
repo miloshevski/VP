@@ -47,8 +47,12 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/books", true)
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/books")
                 );
+
 
         return http.build();
     }

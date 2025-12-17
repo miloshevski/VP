@@ -67,8 +67,12 @@
     <h1>Welcome to our Book Reservation App</h1>
 </header>
 <main>
+    <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </div>
 
-    <!-- Search form (од Лаб 1) -->
     <div class="search-box">
         <form th:action="@{/books}" method="get">
             <div class="search-row">
